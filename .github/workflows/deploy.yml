@@ -26,5 +26,5 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         # Most React apps build into a 'dist' folder (Vite) or 'build' folder (CRA)
         local-dir: ./dist/ 
-        server-dir: /public_html/
+        server-dir: /
         timeout: 180000  # Sets timeout to 180 seconds
