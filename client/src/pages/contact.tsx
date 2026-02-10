@@ -52,7 +52,7 @@ export default function Contact() {
   const contactInfo = [
     { icon: MapPin, label: "Visit Us", value: "123 Digital Avenue, Tech City, TC 90210" },
     { icon: Phone, label: "Call Us", value: "+1 (555) 123-4567" },
-    { icon: Mail, label: "Email Us", value: "hello@digiweb.agency" },
+    { icon: Mail, label: "Email Us", value: "hello@digiweb-agency.com" },
     { icon: Clock, label: "Working Hours", value: "Mon - Fri: 9:00 AM - 6:00 PM" },
   ];
 
