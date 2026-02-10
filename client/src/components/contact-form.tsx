@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { X } from "lucide-react";
 
 interface ContactFormProps {
   open: boolean;
@@ -27,17 +26,31 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
       toast.success("Thanks for reaching out! We'll get back to you soon.");
       setFormData({ name: "", email: "", company: "", service: "web-development", message: "" });
-      setIsSubmitting(false);
       onOpenChange(false);
-    }, 1000);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -11,16 +11,37 @@ import { projects } from "@/data/portfolio";
 function ProjectContactForm({ projectName }: { projectName: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       toast.error("Please fill in both fields.");
       return;
     }
-    toast.success("Thanks! We'll be in touch soon.");
-    setName("");
-    setPhone("");
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/contact/quick", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, projectName }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
+      toast.success("Thanks! We'll be in touch soon.");
+      setName("");
+      setPhone("");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -45,8 +66,8 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
           onChange={(e) => setPhone(e.target.value)}
           className="rounded-lg"
         />
-        <Button type="submit" className="rounded-full shrink-0 px-6">
-          Submit <ArrowRight className="ml-2 w-4 h-4" />
+        <Button type="submit" disabled={isSubmitting} className="rounded-full shrink-0 px-6">
+          {isSubmitting ? "Sending..." : <>Submit <ArrowRight className="ml-2 w-4 h-4" /></>}
         </Button>
       </form>
     </div>
