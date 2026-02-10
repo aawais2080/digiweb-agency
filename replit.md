@@ -12,7 +12,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Frontend Architecture
 - **Framework**: React 18 with TypeScript, bundled by Vite
-- **Routing**: Wouter (lightweight client-side router) with routes for `/`, `/services`, `/process`, `/team`, `/contact`
+- **Routing**: Wouter (lightweight client-side router) with routes for `/`, `/services`, `/our-work`, `/our-work/:slug`, `/process`, `/team`, `/contact`
 - **Styling**: Tailwind CSS v4 (using `@import "tailwindcss"` syntax) with CSS variables for theming. Custom fonts: Outfit (display) and Plus Jakarta Sans (body)
 - **UI Components**: shadcn/ui (new-york style) built on Radix UI primitives. Components live in `client/src/components/ui/`
 - **State Management**: TanStack React Query for server state; local React state for UI
@@ -44,6 +44,8 @@ Preferred communication style: Simple, everyday language.
 client/           → Frontend React application
   src/
     components/   → UI components (shadcn/ui + custom)
+    data/         → Static data (portfolio projects)
+    assets/       → Local assets (portfolio screenshots)
     pages/        → Route page components
     hooks/        → Custom React hooks
     lib/          → Utilities (queryClient, cn helper)

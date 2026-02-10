@@ -9,6 +9,7 @@ export function Navbar() {
 
   const links = [
     { href: "/services", label: "Services" },
+    { href: "/our-work", label: "Our Work" },
     { href: "/process", label: "Process" },
     { href: "/team", label: "Team" },
     { href: "/contact", label: "Contact" },
@@ -22,19 +23,22 @@ export function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors ${
-                location === link.href
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-primary"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-primary"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <Link href="/contact">
             <Button className="rounded-full px-6 font-semibold">Get Started</Button>
           </Link>
@@ -50,18 +54,21 @@ export function Navbar() {
 
       {isOpen && (
         <div className="md:hidden bg-background border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-5">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-lg font-medium py-2 ${
-                location === link.href ? "text-primary" : "text-foreground"
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-lg font-medium py-2 ${
+                  isActive ? "text-primary" : "text-foreground"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <Link href="/contact" onClick={() => setIsOpen(false)}>
             <Button className="w-full rounded-full">Get Started</Button>
           </Link>

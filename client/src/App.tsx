@@ -10,6 +10,8 @@ import Services from "@/pages/services";
 import Process from "@/pages/process";
 import Team from "@/pages/team";
 import Contact from "@/pages/contact";
+import OurWork from "@/pages/our-work";
+import ProjectDetail from "@/pages/project-detail";
 
 function Router() {
   return (
@@ -18,6 +20,8 @@ function Router() {
       <Route path="/services" component={Services} />
       <Route path="/process" component={Process} />
       <Route path="/team" component={Team} />
+      <Route path="/our-work" component={OurWork} />
+      <Route path="/our-work/:slug" component={ProjectDetail} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
     </Switch>
