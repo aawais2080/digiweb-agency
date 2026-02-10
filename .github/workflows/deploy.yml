@@ -15,7 +15,7 @@ jobs:
 
     - name: 🔨 Build Project
       env:
-        WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
+        VITE_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
       run: |
         npm install
         npm run build
