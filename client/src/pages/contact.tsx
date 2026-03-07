@@ -18,9 +18,13 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,14 +35,16 @@ export default function Contact() {
       "web-development": "Web Development",
       "graphic-design": "Graphic Design",
       "video-editing": "Video Editing",
-      "seo": "SEO Optimization",
-      "sem": "SEM Marketing",
+      seo: "SEO Optimization",
+      sem: "SEM Marketing",
     };
 
     try {
       const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
       if (!accessKey) {
-        throw new Error("Form service is not configured. Please contact us directly at hello@digiweb-agency.com");
+        throw new Error(
+          "Form service is not configured. Please contact us directly at hello@digiweb-agency.com",
+        );
       }
 
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -64,7 +70,13 @@ export default function Contact() {
       }
 
       toast.success("Thanks for reaching out! We'll get back to you soon.");
-      setFormData({ name: "", email: "", company: "", service: "web-development", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        service: "web-development",
+        message: "",
+      });
     } catch (error: any) {
       toast.error(error.message || "Failed to send message. Please try again.");
     } finally {
@@ -73,10 +85,18 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    { icon: MapPin, label: "Visit Us", value: "123 Digital Avenue, Tech City, TC 90210" },
-    { icon: Phone, label: "Call Us", value: "+1 (555) 123-4567" },
+    {
+      icon: MapPin,
+      label: "Visit Us",
+      value: "123 Digital Avenue, Tech City, TC 90210",
+    },
+    { icon: Phone, label: "Call Us", value: "+92 (311) 6808894" },
     { icon: Mail, label: "Email Us", value: "hello@digiweb-agency.com" },
-    { icon: Clock, label: "Working Hours", value: "Mon - Fri: 9:00 AM - 6:00 PM" },
+    {
+      icon: Clock,
+      label: "Working Hours",
+      value: "Mon - Fri: 9:00 AM - 6:00 PM",
+    },
   ];
 
   return (
@@ -86,12 +106,16 @@ export default function Contact() {
       <section className="pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">Contact Us</span>
+            <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">
+              Contact Us
+            </span>
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-[1.1]">
-              Let's start <span className="text-primary">something great</span> together
+              Let's start <span className="text-primary">something great</span>{" "}
+              together
             </h1>
             <p className="text-xl text-muted-foreground max-w-xl leading-relaxed">
-              Have a project in mind? We'd love to hear about it. Get in touch and let's make it happen.
+              Have a project in mind? We'd love to hear about it. Get in touch
+              and let's make it happen.
             </p>
           </div>
         </div>
@@ -102,11 +126,18 @@ export default function Contact() {
           <div className="grid lg:grid-cols-5 gap-12">
             <div className="lg:col-span-3">
               <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-border/50">
-                <h2 className="text-2xl font-bold text-foreground mb-6">Send us a message</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-6">
+                  Send us a message
+                </h2>
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-foreground font-medium">Your Name</Label>
+                      <Label
+                        htmlFor="name"
+                        className="text-foreground font-medium"
+                      >
+                        Your Name
+                      </Label>
                       <Input
                         id="name"
                         name="name"
@@ -118,7 +149,12 @@ export default function Contact() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-foreground font-medium">Email</Label>
+                      <Label
+                        htmlFor="email"
+                        className="text-foreground font-medium"
+                      >
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -134,7 +170,12 @@ export default function Contact() {
 
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div className="space-y-2">
-                      <Label htmlFor="company" className="text-foreground font-medium">Company (optional)</Label>
+                      <Label
+                        htmlFor="company"
+                        className="text-foreground font-medium"
+                      >
+                        Company (optional)
+                      </Label>
                       <Input
                         id="company"
                         name="company"
@@ -145,7 +186,12 @@ export default function Contact() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="service" className="text-foreground font-medium">Service Interested In</Label>
+                      <Label
+                        htmlFor="service"
+                        className="text-foreground font-medium"
+                      >
+                        Service Interested In
+                      </Label>
                       <select
                         id="service"
                         name="service"
@@ -163,7 +209,12 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message" className="text-foreground font-medium">Tell us about your project</Label>
+                    <Label
+                      htmlFor="message"
+                      className="text-foreground font-medium"
+                    >
+                      Tell us about your project
+                    </Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -181,8 +232,12 @@ export default function Contact() {
                     size="lg"
                     className="w-full rounded-full bg-primary hover:bg-primary/90 h-14 text-lg"
                   >
-                    {isSubmitting ? "Sending..." : (
-                      <>Send Message <Send className="ml-2 w-5 h-5" /></>
+                    {isSubmitting ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        Send Message <Send className="ml-2 w-5 h-5" />
+                      </>
                     )}
                   </Button>
                 </form>
@@ -191,13 +246,20 @@ export default function Contact() {
 
             <div className="lg:col-span-2 space-y-6">
               {contactInfo.map((info, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-border/50 flex gap-4">
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-border/50 flex gap-4"
+                >
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <info.icon size={22} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-foreground mb-1">{info.label}</h3>
-                    <p className="text-muted-foreground text-sm">{info.value}</p>
+                    <h3 className="font-bold text-foreground mb-1">
+                      {info.label}
+                    </h3>
+                    <p className="text-muted-foreground text-sm">
+                      {info.value}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -206,7 +268,8 @@ export default function Contact() {
                 <div className="relative z-10">
                   <h3 className="text-xl font-bold mb-3">Quick Response</h3>
                   <p className="text-white/70 text-sm leading-relaxed">
-                    We typically respond within 24 hours. For urgent inquiries, give us a call and we'll be happy to help right away.
+                    We typically respond within 24 hours. For urgent inquiries,
+                    give us a call and we'll be happy to help right away.
                   </p>
                 </div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/30 rounded-full blur-2xl" />
