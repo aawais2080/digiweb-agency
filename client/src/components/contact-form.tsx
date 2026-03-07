@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,9 +27,13 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,14 +44,16 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
       "web-development": "Web Development",
       "graphic-design": "Graphic Design",
       "video-editing": "Video Editing",
-      "seo": "SEO Optimization",
-      "sem": "SEM Marketing",
+      seo: "SEO Optimization",
+      sem: "SEM Marketing",
     };
 
     try {
       const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
       if (!accessKey) {
-        throw new Error("Form service is not configured. Please contact us directly at hello@digiweb-agency.com");
+        throw new Error(
+          "Form service is not configured. Please contact us directly at hello@digiweb-agency.com",
+        );
       }
 
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -67,7 +79,13 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
       }
 
       toast.success("Thanks for reaching out! We'll get back to you soon.");
-      setFormData({ name: "", email: "", company: "", service: "web-development", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        service: "web-development",
+        message: "",
+      });
       onOpenChange(false);
     } catch (error: any) {
       toast.error(error.message || "Failed to send message. Please try again.");
@@ -80,15 +98,20 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Let's work together</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">
+            Let's work together
+          </DialogTitle>
           <DialogDescription>
-            Tell us about your project and we'll get back to you within 24 hours.
+            Tell us about your project and we'll get back to you within 24
+            hours.
           </DialogDescription>
         </DialogHeader>
-
+        popup form
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-foreground font-medium">Your Name</Label>
+            <Label htmlFor="name" className="text-foreground font-medium">
+              Your Name
+            </Label>
             <Input
               id="name"
               name="name"
@@ -102,7 +125,9 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-foreground font-medium">Email</Label>
+            <Label htmlFor="email" className="text-foreground font-medium">
+              Email
+            </Label>
             <Input
               id="email"
               name="email"
@@ -117,7 +142,9 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company" className="text-foreground font-medium">Company (optional)</Label>
+            <Label htmlFor="company" className="text-foreground font-medium">
+              Company (optional)
+            </Label>
             <Input
               id="company"
               name="company"
@@ -130,7 +157,9 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="service" className="text-foreground font-medium">Service Interested In</Label>
+            <Label htmlFor="service" className="text-foreground font-medium">
+              Service Interested In
+            </Label>
             <select
               id="service"
               name="service"
@@ -148,7 +177,9 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message" className="text-foreground font-medium">Tell us about your project</Label>
+            <Label htmlFor="message" className="text-foreground font-medium">
+              Tell us about your project
+            </Label>
             <Textarea
               id="message"
               name="message"
