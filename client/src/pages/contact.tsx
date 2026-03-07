@@ -40,45 +40,42 @@ export default function Contact() {
     };
 
     try {
-      const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
-      if (!accessKey) {
-        throw new Error(
-          "Form service is not configured. Please contact us directly at hello@digiweb-agency.com",
-        );
-      }
-
+      // Integration with Web3Forms
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: accessKey,
-          subject: `New Contact Form Submission from ${formData.name}`,
-          from_name: "Digiweb Agency Website",
+          access_key: "50fc39da-a0c2-42b3-9cbd-7168deaffd48",
+          subject: `New Inquiry: ${formData.name} - ${serviceLabels[formData.service]}`,
+          from_name: "DigiWeb Agency Contact Form",
           name: formData.name,
           email: formData.email,
           company: formData.company || "Not provided",
-          service: serviceLabels[formData.service] || formData.service,
+          service: serviceLabels[formData.service],
           message: formData.message,
-          replyto: formData.email,
+          replyto: formData.email, // Allows you to reply directly to the user from your email
         }),
       });
 
       const data = await response.json();
 
-      if (!data.success) {
-        throw new Error(data.message || "Something went wrong");
+      if (data.success) {
+        toast.success(
+          "Message sent! We'll get back to you at hello@digiweb-agency.com soon.",
+        );
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          service: "web-development",
+          message: "",
+        });
+      } else {
+        throw new Error(data.message || "Submission failed");
       }
-
-      toast.success("Thanks for reaching out! We'll get back to you soon.");
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        service: "web-development",
-        message: "",
-      });
     } catch (error: any) {
-      toast.error(error.message || "Failed to send message. Please try again.");
+      toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
