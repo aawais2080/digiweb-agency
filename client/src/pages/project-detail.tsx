@@ -21,34 +21,35 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
     }
 
     setIsSubmitting(true);
-    try {
-      const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
-      if (!accessKey) {
-        throw new Error("Form service is not configured. Please contact us directly at hello@digiweb-agency.com");
-      }
 
+    // Capture the current URL automatically
+    const currentUrl = window.location.href;
+
+    try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: accessKey,
-          subject: `Quick Contact Request - Similar to ${projectName}`,
-          from_name: "Digiweb Agency Website",
+          access_key: "50fc39da-a0c2-42b3-9cbd-7168deaffd48",
+          subject: `Quick Lead: Interest in ${projectName}`,
+          from_name: "Digiweb Portfolio Inquiry",
           name,
           phone,
-          message: `Interested in a project similar to: ${projectName}`,
+          project_interest: projectName,
+          page_url: currentUrl,
+          message: `User is interested in a project similar to: ${projectName}. \n\nDirect Link: ${currentUrl}`,
         }),
       });
 
       const data = await response.json();
 
-      if (!data.success) {
+      if (data.success) {
+        toast.success("Thanks! We'll be in touch soon.");
+        setName("");
+        setPhone("");
+      } else {
         throw new Error(data.message || "Something went wrong");
       }
-
-      toast.success("Thanks! We'll be in touch soon.");
-      setName("");
-      setPhone("");
     } catch (error: any) {
       toast.error(error.message || "Failed to send message. Please try again.");
     } finally {
@@ -57,7 +58,7 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
   };
 
   return (
-    <div className="mt-12 p-6 bg-white rounded-2xl border border-border/50">
+    <div className="mt-12 p-6 bg-white rounded-2xl border border-border/50 shadow-sm">
       <h3 className="text-lg font-bold mb-1">
         Want a similar website as {projectName}?
       </h3>
@@ -69,17 +70,29 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="rounded-lg"
+          className="rounded-lg border-border focus:border-primary h-11"
+          required
         />
         <Input
-          placeholder="Phone"
+          placeholder="Phone Number"
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="rounded-lg"
+          className="rounded-lg border-border focus:border-primary h-11"
+          required
         />
-        <Button type="submit" disabled={isSubmitting} className="rounded-full shrink-0 px-6">
-          {isSubmitting ? "Sending..." : <>Submit <ArrowRight className="ml-2 w-4 h-4" /></>}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="rounded-full shrink-0 px-6 h-11 bg-primary hover:bg-primary/90"
+        >
+          {isSubmitting ? (
+            "Sending..."
+          ) : (
+            <>
+              Submit <ArrowRight className="ml-2 w-4 h-4" />
+            </>
+          )}
         </Button>
       </form>
     </div>
@@ -89,14 +102,11 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
 
-  const project = useMemo(
-    () => projects.find((p) => p.slug === slug),
-    [slug]
-  );
+  const project = useMemo(() => projects.find((p) => p.slug === slug), [slug]);
 
   const recentProjects = useMemo(
     () => projects.filter((p) => p.slug !== slug).slice(0, 3),
-    [slug]
+    [slug],
   );
 
   if (!project) {
@@ -105,7 +115,9 @@ export default function ProjectDetail() {
         <Navbar />
         <div className="pt-40 pb-24 text-center">
           <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
-          <p className="text-muted-foreground mb-8">The project you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground mb-8">
+            The project you're looking for doesn't exist.
+          </p>
           <Link href="/our-work">
             <Button className="rounded-full">
               <ArrowLeft className="mr-2 w-4 h-4" /> Back to Our Work
@@ -123,7 +135,10 @@ export default function ProjectDetail() {
 
       <section className="pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="container mx-auto px-4">
-          <Link href="/our-work" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
+          <Link
+            href="/our-work"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
+          >
             <ArrowLeft size={16} className="mr-2" /> Back to all projects
           </Link>
 
@@ -144,18 +159,25 @@ export default function ProjectDetail() {
                 {project.description}
               </p>
 
-              <div className="mb-8">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">Type</h3>
-                <span className="text-foreground">{project.type}</span>
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                    Type
+                  </h3>
+                  <p className="text-foreground">{project.type}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                    Category
+                  </h3>
+                  <p className="text-foreground">{project.category}</p>
+                </div>
               </div>
 
               <div className="mb-8">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">Category</h3>
-                <span className="text-foreground">{project.category}</span>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">Services Delivered</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">
+                  Services Delivered
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {project.services.map((service) => (
                     <span
@@ -168,14 +190,16 @@ export default function ProjectDetail() {
                 </div>
               </div>
 
-              <a
-                href={project.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
-              >
-                Visit the website <ExternalLink size={16} />
-              </a>
+              <div className="flex items-center gap-6">
+                <a
+                  href={project.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary font-bold hover:underline"
+                >
+                  Visit the website <ExternalLink size={16} />
+                </a>
+              </div>
 
               <ProjectContactForm projectName={project.name} />
             </div>
@@ -183,7 +207,7 @@ export default function ProjectDetail() {
         </div>
       </section>
 
-      <section className="py-24 border-t border-border/50">
+      <section className="py-24 border-t border-border/50 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
             Recent <span className="text-primary">projects</span>
@@ -212,21 +236,18 @@ export default function ProjectDetail() {
                       <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                         {p.name}
                       </h3>
-                      <ExternalLink size={14} className="text-muted-foreground" />
+                      <ExternalLink
+                        size={14}
+                        className="text-muted-foreground"
+                      />
                     </div>
-                    <span className="text-sm text-muted-foreground">{p.category}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {p.category}
+                    </span>
                   </div>
                 </div>
               </Link>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link href="/our-work">
-              <Button variant="outline" className="rounded-full px-8">
-                Back to all projects <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
