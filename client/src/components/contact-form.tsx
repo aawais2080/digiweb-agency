@@ -49,20 +49,14 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     };
 
     try {
-      const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
-      if (!accessKey) {
-        throw new Error(
-          "Form service is not configured. Please contact us directly at hello@digiweb-agency.com",
-        );
-      }
-
+      // Integration with your Web3Forms Key
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: accessKey,
-          subject: `New Contact Form Submission from ${formData.name}`,
-          from_name: "Digiweb Agency Website",
+          access_key: "50fc39da-a0c2-42b3-9cbd-7168deaffd48",
+          subject: `Popup Form Inquiry from ${formData.name}`,
+          from_name: "Digiweb Agency (Popup Form)",
           name: formData.name,
           email: formData.email,
           company: formData.company || "Not provided",
@@ -74,19 +68,20 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
       const data = await response.json();
 
-      if (!data.success) {
+      if (data.success) {
+        toast.success("Thanks for reaching out! We'll get back to you soon.");
+        // Clear form and close modal
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          service: "web-development",
+          message: "",
+        });
+        onOpenChange(false);
+      } else {
         throw new Error(data.message || "Something went wrong");
       }
-
-      toast.success("Thanks for reaching out! We'll get back to you soon.");
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        service: "web-development",
-        message: "",
-      });
-      onOpenChange(false);
     } catch (error: any) {
       toast.error(error.message || "Failed to send message. Please try again.");
     } finally {
@@ -96,99 +91,107 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white border-border">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
+          <DialogTitle className="text-2xl font-bold text-foreground">
             Let's work together
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-muted-foreground">
             Tell us about your project and we'll get back to you within 24
             hours.
           </DialogDescription>
         </DialogHeader>
-        popup form
+
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-foreground font-medium">
+            <Label htmlFor="popup-name" className="text-foreground font-medium">
               Your Name
             </Label>
             <Input
-              id="name"
+              id="popup-name"
               name="name"
               placeholder="John Doe"
               value={formData.name}
               onChange={handleChange}
               required
-              data-testid="input-name"
-              className="border-border focus:border-primary"
+              className="border-border focus:border-primary h-11"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-foreground font-medium">
+            <Label
+              htmlFor="popup-email"
+              className="text-foreground font-medium"
+            >
               Email
             </Label>
             <Input
-              id="email"
+              id="popup-email"
               name="email"
               type="email"
               placeholder="john@example.com"
               value={formData.email}
               onChange={handleChange}
               required
-              data-testid="input-email"
-              className="border-border focus:border-primary"
+              className="border-border focus:border-primary h-11"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="company" className="text-foreground font-medium">
-              Company (optional)
-            </Label>
-            <Input
-              id="company"
-              name="company"
-              placeholder="Your Company"
-              value={formData.company}
-              onChange={handleChange}
-              data-testid="input-company"
-              className="border-border focus:border-primary"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label
+                htmlFor="popup-company"
+                className="text-foreground font-medium"
+              >
+                Company
+              </Label>
+              <Input
+                id="popup-company"
+                name="company"
+                placeholder="Optional"
+                value={formData.company}
+                onChange={handleChange}
+                className="border-border focus:border-primary h-11"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label
+                htmlFor="popup-service"
+                className="text-foreground font-medium"
+              >
+                Service
+              </Label>
+              <select
+                id="popup-service"
+                name="service"
+                value={formData.service}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:border-primary bg-background text-foreground h-11 text-sm"
+              >
+                <option value="web-development">Web Development</option>
+                <option value="graphic-design">Graphic Design</option>
+                <option value="video-editing">Video Editing</option>
+                <option value="seo">SEO Optimization</option>
+                <option value="sem">SEM Marketing</option>
+              </select>
+            </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="service" className="text-foreground font-medium">
-              Service Interested In
-            </Label>
-            <select
-              id="service"
-              name="service"
-              value={formData.service}
-              onChange={handleChange}
-              data-testid="select-service"
-              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:border-primary bg-background text-foreground"
+            <Label
+              htmlFor="popup-message"
+              className="text-foreground font-medium"
             >
-              <option value="web-development">Web Development</option>
-              <option value="graphic-design">Graphic Design</option>
-              <option value="video-editing">Video Editing</option>
-              <option value="seo">SEO Optimization</option>
-              <option value="sem">SEM Marketing</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="message" className="text-foreground font-medium">
-              Tell us about your project
+              Message
             </Label>
             <Textarea
-              id="message"
+              id="popup-message"
               name="message"
-              placeholder="Share your vision, goals, and timeline..."
+              placeholder="Briefly describe your project goals..."
               value={formData.message}
               onChange={handleChange}
               required
-              data-testid="textarea-message"
-              className="border-border focus:border-primary min-h-32 resize-none"
+              className="border-border focus:border-primary min-h-24 resize-none"
             />
           </div>
 
@@ -197,16 +200,14 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 rounded-full"
-              data-testid="button-cancel"
+              className="flex-1 rounded-full border-border hover:bg-accent"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 rounded-full bg-primary hover:bg-primary/90"
-              data-testid="button-submit"
+              className="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
             >
               {isSubmitting ? "Sending..." : "Send Message"}
             </Button>
