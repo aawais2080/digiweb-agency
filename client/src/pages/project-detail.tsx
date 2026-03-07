@@ -4,25 +4,29 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, ExternalLink, ArrowLeft } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { ArrowRight, ExternalLink, ArrowLeft, Send } from "lucide-react";
 import { toast } from "sonner";
 import { projects } from "@/data/portfolio";
 
 function ProjectContactForm({ projectName }: { projectName: string }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      toast.error("Please fill in both fields.");
-      return;
-    }
-
     setIsSubmitting(true);
 
-    // Capture the current URL automatically
     const currentUrl = window.location.href;
 
     try {
@@ -31,66 +35,132 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           access_key: "50fc39da-a0c2-42b3-9cbd-7168deaffd48",
-          subject: `Quick Lead: Interest in ${projectName}`,
-          from_name: "Digiweb Portfolio Inquiry",
-          name,
-          phone,
+          subject: `Portfolio Lead: Interested in ${projectName}`,
+          from_name: "DigiWeb Portfolio",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company || "Not provided",
           project_interest: projectName,
           page_url: currentUrl,
-          message: `User is interested in a project similar to: ${projectName}. \n\nDirect Link: ${currentUrl}`,
+          message: `User is interested in a project similar to: ${projectName}. 
+                    \nCompany: ${formData.company || "N/A"}
+                    \nURL: ${currentUrl}`,
+          replyto: formData.email,
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        toast.success("Thanks! We'll be in touch soon.");
-        setName("");
-        setPhone("");
+        toast.success("Details sent! We'll contact you shortly.");
+        setFormData({ name: "", email: "", phone: "", company: "" });
       } else {
         throw new Error(data.message || "Something went wrong");
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to send message. Please try again.");
+      toast.error(error.message || "Failed to send inquiry.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="mt-12 p-6 bg-white rounded-2xl border border-border/50 shadow-sm">
-      <h3 className="text-lg font-bold mb-1">
+    <div className="mt-12 p-8 bg-white rounded-2xl border border-border/50 shadow-sm">
+      <h3 className="text-xl font-bold mb-1 text-foreground">
         Want a similar website as {projectName}?
       </h3>
-      <p className="text-sm text-muted-foreground mb-5">
-        We'll get in touch with you within one business day.
+      <p className="text-sm text-muted-foreground mb-6">
+        Fill out this quick form and we'll get back to you within one business
+        day.
       </p>
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-        <Input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="rounded-lg border-border focus:border-primary h-11"
-          required
-        />
-        <Input
-          placeholder="Phone Number"
-          type="tel"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="rounded-lg border-border focus:border-primary h-11"
-          required
-        />
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label
+              htmlFor="name"
+              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+            >
+              Full Name *
+            </Label>
+            <Input
+              id="name"
+              name="name"
+              placeholder="John Doe"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="rounded-lg border-border focus:border-primary h-11"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label
+              htmlFor="email"
+              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+            >
+              Work Email *
+            </Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="john@company.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="rounded-lg border-border focus:border-primary h-11"
+            />
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label
+              htmlFor="phone"
+              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+            >
+              Phone Number *
+            </Label>
+            <Input
+              id="phone"
+              name="phone"
+              type="tel"
+              placeholder="+92 3XX XXXXXXX"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              className="rounded-lg border-border focus:border-primary h-11"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label
+              htmlFor="company"
+              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+            >
+              Company Name
+            </Label>
+            <Input
+              id="company"
+              name="company"
+              placeholder="e.g. DigiWeb Agency"
+              value={formData.company}
+              onChange={handleChange}
+              className="rounded-lg border-border focus:border-primary h-11"
+            />
+          </div>
+        </div>
+
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-full shrink-0 px-6 h-11 bg-primary hover:bg-primary/90"
+          className="w-full sm:w-auto rounded-full px-8 h-12 bg-primary hover:bg-primary/90 text-white font-bold transition-all"
         >
           {isSubmitting ? (
-            "Sending..."
+            "Sending Inquiry..."
           ) : (
             <>
-              Submit <ArrowRight className="ml-2 w-4 h-4" />
+              Get a Similar Quote <Send className="ml-2 w-4 h-4" />
             </>
           )}
         </Button>
@@ -111,10 +181,12 @@ export default function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-background font-sans selection:bg-primary/20 selection:text-primary">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="pt-40 pb-24 text-center">
-          <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
+          <h1 className="text-4xl font-bold mb-4 text-foreground">
+            Project Not Found
+          </h1>
           <p className="text-muted-foreground mb-8">
             The project you're looking for doesn't exist.
           </p>
@@ -190,16 +262,14 @@ export default function ProjectDetail() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6">
-                <a
-                  href={project.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary font-bold hover:underline"
-                >
-                  Visit the website <ExternalLink size={16} />
-                </a>
-              </div>
+              <a
+                href={project.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-primary font-bold hover:underline mb-4"
+              >
+                Visit the live website <ExternalLink size={16} />
+              </a>
 
               <ProjectContactForm projectName={project.name} />
             </div>
