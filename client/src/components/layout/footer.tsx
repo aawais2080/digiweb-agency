@@ -73,7 +73,6 @@ export function Footer() {
             <h4 className="font-bold mb-4">Contact</h4>
             <address className="text-sm text-muted-foreground not-italic space-y-2">
               <p>Office# 89, Kohinoor City, Faisalabad, Pakistan</p>
-              <p>Tech City, TC 90210</p>
               <p className="pt-2 text-foreground font-medium">
                 hello@digiweb-agency.com
               </p>
