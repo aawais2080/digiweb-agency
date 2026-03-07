@@ -12,46 +12,88 @@ export function Footer() {
               </h3>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Transforming your digital ambitions into concrete success stories through design, code, and strategy.
+              Transforming your digital ambitions into concrete success stories
+              through design, code, and strategy.
             </p>
           </div>
-          
+
           <div>
             <h4 className="font-bold mb-4">Services</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/services" className="hover:text-primary">Web Development</Link></li>
-              <li><Link href="/services" className="hover:text-primary">Graphic Design</Link></li>
-              <li><Link href="/services" className="hover:text-primary">Video Editing</Link></li>
-              <li><Link href="/services" className="hover:text-primary">SEO & SEM</Link></li>
+              <li>
+                <Link href="/services" className="hover:text-primary">
+                  Web Development
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="hover:text-primary">
+                  Graphic Design
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="hover:text-primary">
+                  Video Editing
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="hover:text-primary">
+                  SEO & SEM
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/our-work" className="hover:text-primary">Our Work</Link></li>
-              <li><Link href="/process" className="hover:text-primary">Our Process</Link></li>
-              <li><Link href="/team" className="hover:text-primary">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-primary">Contact</Link></li>
+              <li>
+                <Link href="/our-work" className="hover:text-primary">
+                  Our Work
+                </Link>
+              </li>
+              <li>
+                <Link href="/process" className="hover:text-primary">
+                  Our Process
+                </Link>
+              </li>
+              <li>
+                <Link href="/team" className="hover:text-primary">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-primary">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold mb-4">Contact</h4>
             <address className="text-sm text-muted-foreground not-italic space-y-2">
-              <p>123 Digital Avenue</p>
+              <p>Office# 89, Kohinoor City, Faisalabad, Pakistan</p>
               <p>Tech City, TC 90210</p>
-              <p className="pt-2 text-foreground font-medium">hello@digiweb.agency</p>
-              <p className="text-foreground font-medium">+1 (555) 123-4567</p>
+              <p className="pt-2 text-foreground font-medium">
+                hello@digiweb-agency.com
+              </p>
+              <p className="text-foreground font-medium">+92 (311) 6808894</p>
             </address>
           </div>
         </div>
-        
+
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Digiweb Agency. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Digiweb Agency. All rights
+            reserved.
+          </p>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-primary">Privacy Policy</a>
-            <a href="#" className="hover:text-primary">Terms of Service</a>
+            <a href="#" className="hover:text-primary">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-primary">
+              Terms of Service
+            </a>
           </div>
         </div>
       </div>

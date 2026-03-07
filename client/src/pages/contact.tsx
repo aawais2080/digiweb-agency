@@ -88,7 +88,7 @@ export default function Contact() {
     {
       icon: MapPin,
       label: "Visit Us",
-      value: "123 Digital Avenue, Tech City, TC 90210",
+      value: "Office# 89, Kohinoor City, Faisalabad, Pakistan",
     },
     { icon: Phone, label: "Call Us", value: "+92 (311) 6808894" },
     { icon: Mail, label: "Email Us", value: "hello@digiweb-agency.com" },
