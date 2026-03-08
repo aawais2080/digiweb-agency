@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { Link, useParams } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowRight, ExternalLink, ArrowLeft, Send } from "lucide-react";
 import { toast } from "sonner";
 import { projects } from "@/data/portfolio";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 function ProjectContactForm({ projectName }: { projectName: string }) {
   const [formData, setFormData] = useState({
@@ -16,17 +17,28 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
     phone: "",
     company: "",
   });
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onHCaptchaChange = (token: string) => {
+    setCaptchaToken(token);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
+    if (!captchaToken) {
+      toast.error("Please complete the security check.");
+      return;
+    }
+
+    setIsSubmitting(true);
     const currentUrl = window.location.href;
 
     try {
@@ -47,6 +59,7 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
                     \nCompany: ${formData.company || "N/A"}
                     \nURL: ${currentUrl}`,
           replyto: formData.email,
+          "h-captcha-response": captchaToken,
         }),
       });
 
@@ -55,6 +68,8 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
       if (data.success) {
         toast.success("Details sent! We'll contact you shortly.");
         setFormData({ name: "", email: "", phone: "", company: "" });
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha();
       } else {
         throw new Error(data.message || "Something went wrong");
       }
@@ -151,6 +166,17 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
           </div>
         </div>
 
+        {/* Captcha Section */}
+        <div className="py-2">
+          <HCaptcha
+            ref={captchaRef}
+            sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+            reCaptchaCompat={false}
+            onVerify={onHCaptchaChange}
+            onExpire={() => setCaptchaToken(null)}
+          />
+        </div>
+
         <Button
           type="submit"
           disabled={isSubmitting}
@@ -169,6 +195,7 @@ function ProjectContactForm({ projectName }: { projectName: string }) {
   );
 }
 
+// ProjectDetail remains the same as your previous code...
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
 
