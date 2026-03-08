@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -16,7 +17,10 @@ export default function Contact() {
     service: "web-development",
     message: "",
   });
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -27,8 +31,18 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onHCaptchaChange = (token: string) => {
+    setCaptchaToken(token);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!captchaToken) {
+      toast.error("Please complete the captcha verification.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const serviceLabels: Record<string, string> = {
@@ -40,7 +54,6 @@ export default function Contact() {
     };
 
     try {
-      // Integration with Web3Forms
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,17 +66,15 @@ export default function Contact() {
           company: formData.company || "Not provided",
           service: serviceLabels[formData.service],
           message: formData.message,
-          replyto: formData.email, // Allows you to reply directly to the user from your email
+          replyto: formData.email,
+          "h-captcha-response": captchaToken, // Attach the token for verification
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        toast.success(
-          "Message sent! We'll get back to you at hello@digiweb-agency.com soon.",
-        );
-        // Reset form
+        toast.success("Message sent! We'll get back to you soon.");
         setFormData({
           name: "",
           email: "",
@@ -71,6 +82,8 @@ export default function Contact() {
           service: "web-development",
           message: "",
         });
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha(); // Reset the widget visually
       } else {
         throw new Error(data.message || "Submission failed");
       }
@@ -220,6 +233,17 @@ export default function Contact() {
                       onChange={handleChange}
                       required
                       className="border-border focus:border-primary min-h-[160px] resize-none"
+                    />
+                  </div>
+
+                  {/* hCaptcha Widget */}
+                  <div className="py-2 overflow-hidden">
+                    <HCaptcha
+                      ref={captchaRef}
+                      sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                      reCaptchaCompat={false}
+                      onVerify={onHCaptchaChange}
+                      onExpire={() => setCaptchaToken(null)}
                     />
                   </div>
 
