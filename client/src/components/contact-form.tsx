@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 interface ContactFormProps {
   open: boolean;
@@ -25,7 +26,10 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     service: "web-development",
     message: "",
   });
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -36,8 +40,18 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onHCaptchaChange = (token: string) => {
+    setCaptchaToken(token);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!captchaToken) {
+      toast.error("Please complete the security check.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const serviceLabels: Record<string, string> = {
@@ -49,7 +63,6 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
     };
 
     try {
-      // Integration with your Web3Forms Key
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,6 +76,7 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           service: serviceLabels[formData.service] || formData.service,
           message: formData.message,
           replyto: formData.email,
+          "h-captcha-response": captchaToken,
         }),
       });
 
@@ -70,7 +84,6 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
 
       if (data.success) {
         toast.success("Thanks for reaching out! We'll get back to you soon.");
-        // Clear form and close modal
         setFormData({
           name: "",
           email: "",
@@ -78,6 +91,8 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
           service: "web-development",
           message: "",
         });
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha();
         onOpenChange(false);
       } else {
         throw new Error(data.message || "Something went wrong");
@@ -90,8 +105,16 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-white border-border">
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        if (!val) {
+          setCaptchaToken(null); // Clear token on close
+        }
+        onOpenChange(val);
+      }}
+    >
+      <DialogContent className="sm:max-w-md bg-white border-border max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-foreground">
             Let's work together
@@ -195,7 +218,18 @@ export function ContactForm({ open, onOpenChange }: ContactFormProps) {
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
+          {/* hCaptcha Integration */}
+          <div className="flex justify-center py-2">
+            <HCaptcha
+              ref={captchaRef}
+              sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+              reCaptchaCompat={false}
+              onVerify={onHCaptchaChange}
+              onExpire={() => setCaptchaToken(null)}
+            />
+          </div>
+
+          <div className="flex gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
