@@ -6,7 +6,8 @@
   "scripts": {
     "dev:client": "vite dev --port 5000",
     "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "tsx script/build.ts",
+    "sitemap": "tsx scripts/generate-sitemap.ts",
+    "build": "npm run sitemap && tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "db:push": "drizzle-kit push"
@@ -69,6 +70,7 @@
     "react-resizable-panels": "^2.1.9",
     "recharts": "^2.15.4",
     "resend": "^6.9.1",
+    "sitemap-generator": "^8.5.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
