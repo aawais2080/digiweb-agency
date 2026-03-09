@@ -1,7 +1,8 @@
 import fs from "fs";
-import { projects } from "../client/src/data/portfolio"; // Adjust path to your data file
+// Path adjusted for your specific folder structure
+import { projects } from "../client/src/data/portfolio";
 
-const BASE_URL = "https://digiweb-agency.com";
+const BASE_URL = "https://digiwebagency.com";
 
 const staticPages = ["", "/our-work", "/services", "/contact"];
 
@@ -24,12 +25,10 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 </urlset>`;
 
 try {
-  // Ensure the public directory exists
-  if (!fs.existsSync("public")) {
-    fs.mkdirSync("public");
-  }
-  fs.writeFileSync("public/sitemap.xml", sitemap.trim());
-  console.log("✅ Sitemap generated: public/sitemap.xml");
+  // Direct output to the client's public folder for deployment
+  const outputPath = "client/public/sitemap.xml";
+  fs.writeFileSync(outputPath, sitemap.trim());
+  console.log(`✅ Sitemap generated successfully at ${outputPath}`);
 } catch (err) {
   console.error("❌ Failed to generate sitemap:", err);
 }
