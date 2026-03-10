@@ -79,7 +79,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-xl">
               <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">
-                Our Expertise 123
+                Our Expertise 1234
               </span>
               <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                 Shaping your <br />
