@@ -18,13 +18,18 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold font-display text-primary flex items-center gap-1">
+        <Link
+          href="/"
+          className="text-2xl font-bold font-display text-primary flex items-center gap-1"
+        >
           Digiweb<span className="text-foreground">.</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) => {
-            const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href));
+            const isActive =
+              location === link.href ||
+              (link.href !== "/" && location.startsWith(link.href));
             return (
               <Link
                 key={link.href}
@@ -40,12 +45,15 @@ export function Navbar() {
             );
           })}
           <Link href="/contact">
-            <Button className="rounded-full px-6 font-semibold">Get Started</Button>
+            <Button className="rounded-full px-6 font-semibold">
+              Get Started
+            </Button>
           </Link>
         </div>
 
         <button
           className="md:hidden text-foreground p-2"
+          aria-label="Open Menu"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X /> : <Menu />}
@@ -55,7 +63,9 @@ export function Navbar() {
       {isOpen && (
         <div className="md:hidden bg-background border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-5">
           {links.map((link) => {
-            const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href));
+            const isActive =
+              location === link.href ||
+              (link.href !== "/" && location.startsWith(link.href));
             return (
               <Link
                 key={link.href}
