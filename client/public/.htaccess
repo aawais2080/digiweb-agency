@@ -1,17 +1,43 @@
+# 1. Initialize Rewrite Engine
 RewriteEngine On
 RewriteBase /
-RewriteRule ^index\.html$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
 
-<IfModule mod_headers.c>
-    Header set Cache-Control "no-cache, no-store, must-revalidate"
-    Header set Pragma "no-cache"
-    Header set Expires 0
+# 2. FORCE CORRECT MIME TYPES (Crucial for the "text/html" error)
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType application/javascript .mjs
+    AddType image/webp .webp
 </IfModule>
 
-<IfModule mod_mime.c>
-  AddType application/javascript .js
-  AddType application/javascript .mjs
+# 3. COMPRESSION (Helps reduce the 105KiB bundle size transfer)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# 4. ROUTING LOGIC
+# If the requested file or directory exists, serve it immediately
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# If it doesn't exist, send the request to index.html (SPA Routing)
+RewriteRule . /index.html [L]
+
+# 5. CACHING (Optimized for performance)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Cache static assets for 1 year (since they have hashes in the name)
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    # Do not cache the HTML file so users always get the latest version
+    ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
