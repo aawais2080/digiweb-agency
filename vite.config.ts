@@ -31,24 +31,22 @@ export default defineConfig({
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
+  css: {
+    postcss: {
+      plugins: [],
+    },
+  },
   root: path.resolve(import.meta.dirname, "client"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-    // AUTOMATION: This handles the preloading logic for you
-    modulePreload: {
-      polyfill: true,
-    },
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "framer-motion"],
-        },
-      },
-    },
   },
   server: {
     host: "0.0.0.0",
     allowedHosts: true,
+    fs: {
+      strict: true,
+      deny: ["**/.*"],
+    },
   },
 });
