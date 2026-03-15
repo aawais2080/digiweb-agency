@@ -148,7 +148,8 @@ export default function Home() {
                       href="/services"
                       className="mt-6 flex items-center text-primary font-medium text-sm group-hover:underline"
                     >
-                      Learn more <ArrowRight size={16} className="ml-1" />
+                      View our digital services{" "}
+                      <ArrowRight size={16} className="ml-1" />
                     </Link>
                   </CardContent>
                 </Card>
