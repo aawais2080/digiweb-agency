@@ -4,31 +4,37 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
-import Services from "@/pages/services";
-import Process from "@/pages/process";
-import Team from "@/pages/team";
-import Contact from "@/pages/contact";
-import OurWork from "@/pages/our-work";
-import ProjectDetail from "@/pages/project-detail";
+import { lazy, Suspense } from "react";
+
+// Lazy load the pages
+const Home = lazy(() => import("@/pages/home"));
+const Services = lazy(() => import("@/pages/services"));
+const Process = lazy(() => import("@/pages/process"));
+const Team = lazy(() => import("@/pages/team"));
+const Contact = lazy(() => import("@/pages/contact"));
+const OurWork = lazy(() => import("@/pages/our-work"));
+const ProjectDetail = lazy(() => import("@/pages/project-detail"));
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/services" component={Services} />
-      <Route path="/process" component={Process} />
-      <Route path="/team" component={Team} />
-      <Route path="/our-work" component={OurWork} />
-      <Route path="/our-work/:slug" component={ProjectDetail} />
-      <Route path="/contact" component={Contact} />
-      <Route component={NotFound} />
-    </Switch>
+    // Suspense shows a fallback (like a spinner or empty div) while the page chunk loads
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/services" component={Services} />
+        <Route path="/process" component={Process} />
+        <Route path="/team" component={Team} />
+        <Route path="/our-work" component={OurWork} />
+        <Route path="/our-work/:slug" component={ProjectDetail} />
+        <Route path="/contact" component={Contact} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
-function App() {
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -39,5 +45,3 @@ function App() {
     </QueryClientProvider>
   );
 }
-
-export default App;

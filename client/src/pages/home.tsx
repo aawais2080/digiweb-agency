@@ -26,13 +26,21 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
         {/* Background Overlay */}
-        <div
+        {/* <div
           className="absolute inset-0 z-0 opacity-10 pointer-events-none"
           style={{
             backgroundImage: `url(${heroBg})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
+        /> */}
+
+        <img
+          src={heroBg}
+          alt=""
+          fetchPriority="high"
+          loading="eager"
+          className="absolute inset-0 z-0 opacity-10 pointer-events-none object-cover w-full h-full"
         />
 
         <div className="container mx-auto px-4 relative z-10">
