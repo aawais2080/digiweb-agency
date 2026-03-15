@@ -77,7 +77,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Abstract decorative elements */}
           <div className="absolute top-20 right-0 w-64 h-64 bg-secondary/30 rounded-full blur-3xl -z-10 animate-pulse" />
           <div className="absolute bottom-0 left-20 w-48 h-48 bg-accent/50 rounded-full blur-3xl -z-10" />
         </section>
