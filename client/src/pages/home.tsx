@@ -13,7 +13,7 @@ import {
   Search,
   Megaphone,
 } from "lucide-react";
-import heroBg from "@assets/generated_images/abstract_doodle_line_art_background_for_hero_section.png";
+import heroBg from "@assets/generated_images/abstract_doodle_line_art_background_for_hero_section.webp";
 
 export default function Home() {
   const [contactOpen, setContactOpen] = useState(false);
