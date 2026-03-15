@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     runtimeErrorOverlay(),
-    tailwindcss(),
+    tailwindcss(), // Tailwind v4 Vite plugin handles everything
     metaImagesPlugin(),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
@@ -31,15 +31,23 @@ export default defineConfig({
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
-  css: {
-    postcss: {
-      plugins: [],
-    },
-  },
+  // FIXED: Removed the empty postcss block that was conflicting with Tailwind v4
   root: path.resolve(import.meta.dirname, "client"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // OPTIMIZATION: Automatically injects <link rel="modulepreload"> for better LCP
+    modulePreload: {
+      polyfill: true,
+    },
+    rollupOptions: {
+      output: {
+        // OPTIMIZATION: Splits heavy libraries to reduce unused JS in the main bundle
+        manualChunks: {
+          vendor: ["react", "react-dom", "framer-motion"],
+        },
+      },
+    },
   },
   server: {
     host: "0.0.0.0",
