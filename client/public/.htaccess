@@ -1,15 +1,18 @@
-# 1. Initialize Rewrite Engine
+# ----------------------------------------------------------------------
+# | Performance & Routing Configuration                                |
+# ----------------------------------------------------------------------
+
 RewriteEngine On
 RewriteBase /
 
-# 2. FORCE CORRECT MIME TYPES (Crucial for the "text/html" error)
+# 1. MIME TYPES: Correct identification of JS modules
 <IfModule mod_mime.c>
     AddType application/javascript .js
     AddType application/javascript .mjs
     AddType image/webp .webp
 </IfModule>
 
-# 3. COMPRESSION (Helps reduce the 105KiB bundle size transfer)
+# 2. GZIP COMPRESSION: Fixes high latency (the 750ms delay)
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/html
@@ -22,22 +25,18 @@ RewriteBase /
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-# 4. ROUTING LOGIC
-# If the requested file or directory exists, serve it immediately
+# 3. ROUTING: Serve physical files if they exist, else send to index.html
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
-
-# If it doesn't exist, send the request to index.html (SPA Routing)
 RewriteRule . /index.html [L]
 
-# 5. CACHING (Optimized for performance)
+# 4. CACHING: Maximize speed for returning visitors
 <IfModule mod_expires.c>
     ExpiresActive On
-    # Cache static assets for 1 year (since they have hashes in the name)
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
     ExpiresByType application/javascript "access plus 1 year"
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"
-    # Do not cache the HTML file so users always get the latest version
-    ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
