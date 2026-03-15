@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     runtimeErrorOverlay(),
-    tailwindcss(), // Tailwind v4 Vite plugin handles everything
+    tailwindcss(),
     metaImagesPlugin(),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
@@ -31,20 +31,33 @@ export default defineConfig({
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
-  // FIXED: Removed the empty postcss block that was conflicting with Tailwind v4
   root: path.resolve(import.meta.dirname, "client"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-    // OPTIMIZATION: Automatically injects <link rel="modulepreload"> for better LCP
     modulePreload: {
       polyfill: true,
     },
     rollupOptions: {
       output: {
-        // OPTIMIZATION: Splits heavy libraries to reduce unused JS in the main bundle
-        manualChunks: {
-          vendor: ["react", "react-dom", "framer-motion"],
+        // Advanced dynamic chunking to maximize Est Savings
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            // Group React core together
+            if (id.includes("react") || id.includes("scheduler")) {
+              return "vendor-core";
+            }
+            // Isolate Framer Motion as it's often a large part of "unused JS" on initial load
+            if (id.includes("framer-motion")) {
+              return "vendor-animation";
+            }
+            // Isolate Lucide or other icon sets
+            if (id.includes("lucide")) {
+              return "vendor-icons";
+            }
+            // Tanstack Query and others
+            return "vendor-utils";
+          }
         },
       },
     },
