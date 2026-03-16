@@ -30,7 +30,7 @@ function Router() {
         <Route path="/services" component={Services} />
         <Route path="/our-work" component={OurWork} />
         {/* <Route path="/project/:id" component={ProjectDetail} /> */}
-        <Route path="/our-work/:id" component={ProjectDetail} />
+        <Route path="/our-work/:slug" component={ProjectDetail} />
         <Route path="/team" component={Team} />
         <Route path="/process" component={Process} />
         <Route path="/contact" component={Contact} />
