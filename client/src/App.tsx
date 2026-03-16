@@ -3,8 +3,8 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { Suspense, lazy } from "react"; // Add these
-import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 
 // Lazy load your pages
 const Home = lazy(() => import("@/pages/home"));
