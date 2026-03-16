@@ -40,23 +40,15 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Advanced dynamic chunking to maximize Est Savings
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            // Group React core together
-            if (id.includes("react") || id.includes("scheduler")) {
-              return "vendor-core";
-            }
-            // Isolate Framer Motion as it's often a large part of "unused JS" on initial load
+            // Keep the heavy hitters separate
             if (id.includes("framer-motion")) {
               return "vendor-animation";
             }
-            // Isolate Lucide or other icon sets
-            if (id.includes("lucide")) {
-              return "vendor-icons";
-            }
-            // Tanstack Query and others
-            return "vendor-utils";
+            // Group everything else into one stable vendor chunk
+            // This prevents the "Cannot set properties of undefined" error
+            return "vendor-libs";
           }
         },
       },
