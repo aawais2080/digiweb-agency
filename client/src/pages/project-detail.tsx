@@ -349,7 +349,7 @@ export default function ProjectDetail() {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

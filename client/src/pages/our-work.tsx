@@ -197,7 +197,7 @@ export default function OurWork() {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

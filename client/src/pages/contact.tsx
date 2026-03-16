@@ -301,7 +301,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

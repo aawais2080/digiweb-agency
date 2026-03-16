@@ -51,10 +51,19 @@ const teamMembers = [
 ];
 
 const values = [
-  { title: "Collaboration", desc: "We work as one team — with you and with each other." },
-  { title: "Transparency", desc: "No surprises. Clear communication at every step." },
+  {
+    title: "Collaboration",
+    desc: "We work as one team — with you and with each other.",
+  },
+  {
+    title: "Transparency",
+    desc: "No surprises. Clear communication at every step.",
+  },
   { title: "Quality", desc: "We never cut corners. Every detail matters." },
-  { title: "Innovation", desc: "Constantly exploring new ways to solve problems." },
+  {
+    title: "Innovation",
+    desc: "Constantly exploring new ways to solve problems.",
+  },
 ];
 
 export default function Team() {
@@ -65,12 +74,17 @@ export default function Team() {
       <section className="pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">Our Team</span>
+            <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">
+              Our Team
+            </span>
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-[1.1]">
-              Connect and grow through our <span className="text-primary">ecosystem</span>
+              Connect and grow through our{" "}
+              <span className="text-primary">ecosystem</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-xl leading-relaxed">
-              Digiweb is an online ecosystem — a group of specialists in the field of online visibility and findability. We bundle our forces and offer all expertise from a single point of contact.
+              Digiweb is an online ecosystem — a group of specialists in the
+              field of online visibility and findability. We bundle our forces
+              and offer all expertise from a single point of contact.
             </p>
           </div>
         </div>
@@ -80,14 +94,25 @@ export default function Team() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, i) => (
-              <Card key={i} className="border-none shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 bg-white overflow-hidden">
+              <Card
+                key={i}
+                className="border-none shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 bg-white overflow-hidden"
+              >
                 <CardContent className="p-8">
-                  <div className={`w-20 h-20 rounded-full ${member.color} flex items-center justify-center text-2xl font-bold mb-6`}>
+                  <div
+                    className={`w-20 h-20 rounded-full ${member.color} flex items-center justify-center text-2xl font-bold mb-6`}
+                  >
                     {member.initials}
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
-                  <p className="text-primary font-medium text-sm mb-4">{member.role}</p>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">{member.bio}</p>
+                  <h3 className="text-xl font-bold text-foreground mb-1">
+                    {member.name}
+                  </h3>
+                  <p className="text-primary font-medium text-sm mb-4">
+                    {member.role}
+                  </p>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                    {member.bio}
+                  </p>
                   <div className="flex gap-3">
                     <button className="w-9 h-9 rounded-full bg-background flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
                       <Linkedin size={16} />
@@ -109,16 +134,25 @@ export default function Team() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">What Drives Us</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground">Our Values</h2>
+            <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">
+              What Drives Us
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground">
+              Our Values
+            </h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, i) => (
-              <div key={i} className="text-center p-8 rounded-2xl bg-background hover:bg-primary/5 transition-colors">
+              <div
+                key={i}
+                className="text-center p-8 rounded-2xl bg-background hover:bg-primary/5 transition-colors"
+              >
                 <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   {i + 1}
                 </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{value.title}</h3>
+                <h3 className="text-lg font-bold text-foreground mb-2">
+                  {value.title}
+                </h3>
                 <p className="text-muted-foreground text-sm">{value.desc}</p>
               </div>
             ))}
@@ -132,17 +166,21 @@ export default function Team() {
             Want to join our <span className="text-primary">team</span>?
           </h2>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
-            We're always looking for talented people who share our passion for digital excellence.
+            We're always looking for talented people who share our passion for
+            digital excellence.
           </p>
           <Link href="/contact">
-            <Button size="lg" className="rounded-full text-lg px-8 h-14 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
+            <Button
+              size="lg"
+              className="rounded-full text-lg px-8 h-14 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25"
+            >
               Get in Touch <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </Link>
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
