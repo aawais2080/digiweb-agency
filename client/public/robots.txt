@@ -3,4 +3,4 @@ Allow: /
 Disallow: /*add_to_wishlist=*
 Disallow: /*remove_from_wishlist=*
 Disallow: /*?save*
-Sitemap: https://digiwebagency.com/sitemap.xml
+Sitemap: https://digiweb-agency.com/sitemap.xml
